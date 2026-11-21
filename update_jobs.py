@@ -8,6 +8,7 @@ import email.utils
 import html
 import xml.etree.ElementTree as ET
 import json
+import os
 import re
 import sys
 import time
@@ -21,7 +22,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'jobs.json'
 TODAY = dt.datetime.now(dt.timezone.utc).isoformat(timespec='seconds')
-MAX_JOB_AGE_DAYS = 365
+MAX_JOB_AGE_DAYS = 90
 AREA = (
  'kirchheim unter teck','kirchheim teck','dettingen unter teck','notzingen','holzmaden','ohmden',
  'weilheim an der teck','bissingen an der teck','neidlingen','lenningen','oberlenningen',
@@ -47,6 +48,12 @@ KEYWORDS = {
  'fertigungsorganisation':27,'operations planner':27,'projektkoordinator produktion':24,
  'value stream planner':33,'layoutplanner':29,'process engineer':27,
  'production steering':30,'quality engineer production':24,
+ 'produktionskoordinator':30,'fertigungskoordinator':30,'arbeitsplaner':30,
+ 'arbeitsplanung':29,'produktionsorganis':28,'prozessmanager produktion':28,
+ 'continuous improvement manager':27,'produktionsdisposition':25,
+ 'materialdisponent':23,'fertigungsdisposition':24,'planung fertigung':25,
+ 'betriebsorganis':25,'production coordinator':29,'production scheduler':30,
+ 'manufacturing coordinator':28,'industrial engineerin':30,
 }
 SKILLS = {'montage','lean','fmea','apqp','planzeit','taktzeit','kapazitaet','line balancing',
  'wertstrom','pdca','shopfloor','arbeitsvorbereitung','prozess','vorrichtung','beschaffung',
@@ -170,33 +177,6 @@ def personio_feed(slug: str, company: str) -> tuple[list[dict], int]:
     return results, 1
 
 
-def ashby_neura_feed() -> tuple[list[dict], int]:
-    """Ashby public Job Postings API – documented and keyless."""
-    data = get_json('https://api.ashbyhq.com/posting-api/job-board/neura-robotics-gmbh')
-    items = data.get('jobs')
-    if not isinstance(items, list): raise ValueError('Ashby API-Format ungültig')
-    out = []
-    for item in items:
-        if not item.get('isListed', True): continue
-        if norm(item.get('employmentType')) not in ('fulltime', 'full-time', 'full time'): continue
-        title = item.get('title') or ''
-        if not title_points(title): continue
-        primary = item.get('location') or ''
-        addr = (item.get('address') or {}).get('postalAddress') or {}
-        localities = [primary, addr.get('addressLocality') or '']
-        localities.extend((x or {}).get('location','') for x in (item.get('secondaryLocations') or []))
-        site = next((str(x) for x in localities if location_ok(str(x))), '')
-        if not site: continue
-        apply_url = item.get('jobUrl') or item.get('applyUrl') or ''
-        if not apply_url.startswith('https://'): continue
-        ident = str(item.get('id') or apply_url)
-        desc = item.get('descriptionPlain') or item.get('descriptionHtml') or ''
-        job = job_obj('NEURA Robotics / Ashby', title, 'NEURA Robotics', site, apply_url,
-                      desc, item.get('publishedAt'), ident, 'FullTime')
-        if job: out.append(job)
-    return out, 1
-
-
 def heller_rss_feed() -> tuple[list[dict], int]:
     """HELLER expressly publishes an 'Alle Stellenangebote' RSS feed."""
     raw = get_text('https://recruitment.heller.biz/handlers/offerRss.ashx?LCID=1031')
@@ -238,7 +218,17 @@ def get_json(url: str, *, tries: int=2) -> dict:
     raise RuntimeError(f'HTTP/API-Abruf fehlgeschlagen: {type(last).__name__}')
 
 
+def excluded_employer(company: Any, url: Any = '') -> bool:
+    """Exclude current employer across every source and any carried-over jobs."""
+    name = norm(company)
+    site = urllib.parse.urlsplit(str(url or '')).netloc.casefold()
+    return (bool(re.search(r'(?<!\w)neura(?:\s+robotics)?(?!\w)', name))
+            or 'neura-robotics.com' in site
+            or 'neura-robotics.de' in site)
+
+
 def job_obj(source: str,title: str,company: str,location: str,url: str,description: str,created: Any,unique_id: str,employment: str='') -> dict|None:
+    if excluded_employer(company, url): return None
     if not location_ok(location) or not fulltime_ok(title,description,employment):return None
     if not url.startswith('https://'): return None
     desc = strip_tags(description)[:2200]
@@ -303,6 +293,82 @@ def smartrecruiters_bosch() -> tuple[list[dict],int]:
     return results,read
 
 
+# Broader nationwide aggregator. Free German key can be stored ONLY as a
+# GitHub Actions secret JOOBLE_API_KEY, never in a public repository file.
+JOOBLE_TERMS = (
+    'Industrial Engineer', 'Produktionsplaner', 'Fertigungsplaner',
+    'Arbeitsvorbereitung', 'Fertigungssteuerung', 'Produktionssteuerung',
+    'Prozessoptimierung', 'Lean Management', 'Montageplanung',
+    'Produktionskoordinator', 'Arbeitsplanung', 'Fertigungsorganisation',
+    'Manufacturing Engineer', 'Process Engineer', 'Wertstromplanung',
+    'Produktionslogistik', 'Fertigungsdisponent', 'Continuous Improvement',
+)
+
+
+def jooble_feed() -> tuple[list[dict],int]:
+    key=os.environ.get('JOOBLE_API_KEY','').strip()
+    if not key:
+        raise RuntimeError('Noch nicht aktiviert: kostenloser API-Schlüssel fehlt (GitHub Secret JOOBLE_API_KEY)')
+    # 3 calls per run * 24 runs/day = 72 requests/day, under the documented 100/day free limit.
+    # The 18 job families are covered over six scheduled hours; prior matches are retained.
+    hour=int(dt.datetime.now(dt.timezone.utc).timestamp()//3600)
+    start=(hour % 6)*3
+    terms=JOOBLE_TERMS[start:start+3]
+    out=[];calls=0
+    endpoint='https://de.jooble.org/api/'+urllib.parse.quote(key,safe='')
+    for term in terms:
+        body=json.dumps({'keywords':term, 'location':'Kirchheim unter Teck',
+                         'radius':'26','page':'1','ResultOnPage':50,
+                         'companysearch':False}).encode('utf-8')
+        req=urllib.request.Request(endpoint,data=body,headers={
+            'Accept':'application/json','Content-Type':'application/json',
+            'User-Agent':'LuisaJobFinder/6.0 (private job finder)'},method='POST')
+        try:
+            with urllib.request.urlopen(req,timeout=25) as response:
+                payload=json.load(response)
+        except (urllib.error.HTTPError,urllib.error.URLError,TimeoutError) as ex:
+            # Avoid leaking key from the full URL into public Actions logs.
+            raise RuntimeError('Jooble nicht erreichbar (HTTP/Netzwerk); API-Schlüssel und Limit prüfen') from None
+        calls+=1
+        jobs=payload.get('jobs')
+        if not isinstance(jobs,list):
+            raise ValueError('Unbekanntes Jooble-Antwortformat')
+        for row in jobs:
+            url=str(row.get('link') or '')
+            obj=job_obj('Jooble',row.get('title',''),row.get('company',''),
+                        row.get('location',''),url,row.get('snippet',''),
+                        row.get('updated'),str(row.get('id') or url),
+                        str(row.get('type') or ''))
+            if obj:out.append(obj)
+    return list({j['id']:j for j in out}.values()),calls
+
+
+# An additional keyless feed, specializing in remote/hybrid opportunities.
+# Only explicitly local workplaces are accepted by location_ok; external ad
+# texts and application URLs are not extracted or republished.
+def nomado_feed() -> tuple[list[dict],int]:
+    url='https://api.nomado24.de/api/public/v2/jobs?applicant_region=DE&work_arrangement=hybrid&limit=100'
+    out=[];count=0
+    for _ in range(3):
+        payload=get_json(url,tries=1)
+        rows=payload.get('data',[])
+        if not isinstance(rows,list):raise ValueError('Nomado24-Format ungültig')
+        count+=1
+        for row in rows:
+            if not isinstance(row,dict):continue
+            location=str(row.get('location') or '')
+            obj=job_obj('Nomado24',row.get('title',''),row.get('companyName',''),
+                        location,row.get('url',''),' '.join(map(str,row.get('tags') or [])),
+                        row.get('publishedAt'),row.get('slug') or row.get('url',''),
+                        'Vollzeit' if str(row.get('jobType','')).lower() in ('full-time','fulltime','vollzeit') else '')
+            if obj: out.append(obj)
+        meta=payload.get('meta') or {}
+        cursor=meta.get('nextCursor') or payload.get('nextCursor')
+        if not cursor or not meta.get('hasNext'):break
+        url='https://api.nomado24.de/api/public/v2/jobs?cursor='+urllib.parse.quote(str(cursor),safe='')+'&limit=100'
+    return out,count
+
+
 def load_prior() -> dict:
     try: return json.loads(OUT.read_text(encoding='utf-8'))
     except (FileNotFoundError,ValueError):return {}
@@ -314,10 +380,11 @@ def main() -> int:
     feeds = [
         ('Arbeitnow', arbeitnow_feed),
         ('Bosch / SmartRecruiters', smartrecruiters_bosch),
-        ('NEURA Robotics / Ashby', ashby_neura_feed),
         ('IBO GmbH / Personio', lambda: personio_feed('ibo-tec', 'IBO GmbH')),
         ('Polymedics / Personio', lambda: personio_feed('polymedics-innovations-gmbh','Polymedics')),
         ('HELLER / RSS', heller_rss_feed),
+        ('Nomado24', nomado_feed),
+        *([('Jooble', jooble_feed)] if os.environ.get('JOOBLE_API_KEY') else []),
     ]
     for label,fn in feeds:
         try:
@@ -330,15 +397,22 @@ def main() -> int:
     if not any(s['ok'] for s in sources):
         print('Kein Feed erreichbar. Vorhandene jobs.json bleibt unverändert.',file=sys.stderr)
         return 1
-    # Preserve previously found valid jobs for up to 10 days when one provider fails.
+    # Keep rotating Jooble searches visible between runs (up to 12 hours),
+    # and retain jobs of a temporarily failed provider for up to 2 days.
     good_sources={s['name'] for s in sources if s['ok']}
-    prev_first={j.get('id'):j.get('firstFound') for j in prior.get('jobs',[])}
+    prev_first={j.get('id'):j.get('firstFound') for j in prior.get('jobs',[]) if not excluded_employer(j.get('company',''),j.get('url',''))}
     previous=prior.get('jobs',[]) if isinstance(prior.get('jobs',[]),list) else []
     carried_ids=set()
+    fresh_ids={j['id'] for j in all_jobs}
     for p in previous:
-        if p.get('source') in good_sources or not p.get('url','').startswith('https://'):continue
+        if excluded_employer(p.get('company',''),p.get('url','')):continue
+        if not p.get('url','').startswith('https://') or p.get('id') in fresh_ids:continue
+        old_source=p.get('source')
+        # Never carry results from a provider no longer configured (e.g. NEURA).
+        if old_source not in {label for label, _ in feeds}:continue
         dt_seen=stamp(p.get('lastSeen') or p.get('firstFound'))
-        if dt_seen and time.time()*1000 - dt_seen < 10*86400*1000:
+        max_age_hours=12 if old_source=='Jooble' and old_source in good_sources else 48
+        if dt_seen and time.time()*1000-dt_seen < max_age_hours*3600*1000:
             all_jobs.append(p)
             carried_ids.add(p.get('id'))
     by_key={}
@@ -348,9 +422,9 @@ def main() -> int:
         if j.get('id') not in carried_ids: j['lastSeen']=TODAY
         if key not in by_key or j['matchScore']>by_key[key]['matchScore']:
             by_key[key]=j
-    result=sorted(by_key.values(),key=lambda x:(-x['matchScore'],-int(x['created'] or 0)))[:200]
+    result=sorted(by_key.values(),key=lambda x:(-x['matchScore'],-int(x['created'] or 0)))[:500]
     out={'schema':2,'generatedAt':TODAY,'region':'Kirchheim unter Teck, grob 20 km (Ortsliste)',
-         'profile':'Industrial Engineering / Produktionsplanung / Arbeitsvorbereitung',
+         'profile':'Breite Suche: Industrial Engineering, Produktion, Prozessplanung, Arbeitsvorbereitung',
          'sources':sources,'jobs':result}
     OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Jobliste aktualisiert:',len(result),'Jobs;', [(s['name'],s['matched']) for s in sources])
