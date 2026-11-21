@@ -54,6 +54,14 @@ KEYWORDS = {
  'materialdisponent':23,'fertigungsdisposition':24,'planung fertigung':25,
  'betriebsorganis':25,'production coordinator':29,'production scheduler':30,
  'manufacturing coordinator':28,'industrial engineerin':30,
+ 'fabrikplan':34,'werksplan':31,'werksstrukturplan':30,'fertigungsbereichsplan':28,
+ 'materialflussplan':32,'logistikplan':29,'produktionssystemplan':30,
+ 'fertigungsprozessplan':31,'layoutplan':29,'layoutengineer':27,
+ 'fabriklayout':28,'re fa-analyst':24,'industrial engineer expert':33,
+ 'process planner':29,'manufacturing planner':31,'production coordinator':29,
+ 'lean coordinator':26,'produktionscontroller':23,'industrial engineer specialist':30,
+ 'kvp manager':26,'kontinuierliche verbesser':25,
+ 'technische projektkoordination':25,'projektplanung fertigung':26,
 }
 SKILLS = {'montage','lean','fmea','apqp','planzeit','taktzeit','kapazitaet','line balancing',
  'wertstrom','pdca','shopfloor','arbeitsvorbereitung','prozess','vorrichtung','beschaffung',
@@ -114,6 +122,15 @@ def score_job(title: str, desc: str) -> tuple[int, list[str]]:
     if not alternative and re.search(r'(abgeschlossenes studium|hochschulabschluss|university degree|bachelorabschluss)',d):
         score -= 18
         reasons.append('Studienanforderung im Original prüfen')
+    # A title match alone is not a guarantee of fit: eliminate dedicated CNC coding roles
+    # which require controls/programming Luisa has not demonstrated.
+    cnc_specialist = bool(re.search(r'cnc|zerspanungs|dreh.fraes|mazatrol|heidenhain', title_n))
+    if cnc_specialist and re.search(r'cnc.programm|mazatrol|fanuc|heidenhain|siemens 840d|zerspanung',d):
+        score -= 34
+        reasons.append('Spezielle CNC-Programmierkenntnisse notwendig – eher ungeeignet')
+    # Do not give a high score to specialist chemistry or pure software roles.
+    if re.search(r'(chemie|lacklabor|werkstoffpruef|softwareentwickl|embedded software)',title_n):
+        score -= 28
     if 'senior' in title_n or 'lead ' in title_n or 'leiter' in title_n: score -= 7
     return max(0, min(96,score)), reasons
 
@@ -134,7 +151,7 @@ def get_text(url: str, *, tries: int=2) -> str:
     for attempt in range(tries):
         try:
             req = urllib.request.Request(url, headers={
-                'User-Agent': 'LuisaJobFinder/5.0 (public employer job feed reader)',
+                'User-Agent': 'LuisaJobFinder/7.0 (public employer job feed reader)',
                 'Accept': 'application/xml, application/rss+xml, application/json, text/xml, */*'})
             with urllib.request.urlopen(req, timeout=20) as response:
                 return response.read(10_000_000).decode('utf-8-sig', errors='replace')
@@ -208,7 +225,7 @@ def get_json(url: str, *, tries: int=2) -> dict:
     last = None
     for attempt in range(tries):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/4.0 (public job feed reader)', 'Accept':'application/json'})
+            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/7.0 (public job feed reader)', 'Accept':'application/json'})
             with urllib.request.urlopen(req,timeout=20) as response:
                 raw=response.read(10_000_000)
             return json.loads(raw)
@@ -228,7 +245,7 @@ def excluded_employer(company: Any, url: Any = '') -> bool:
 
 
 def job_obj(source: str,title: str,company: str,location: str,url: str,description: str,created: Any,unique_id: str,employment: str='') -> dict|None:
-    if excluded_employer(company, url): return None
+    if excluded_employer(company, url) or bool(re.search(r'(?<!\w)neura(?:\s+robotics)?(?!\w)',norm(title))): return None
     if not location_ok(location) or not fulltime_ok(title,description,employment):return None
     if not url.startswith('https://'): return None
     desc = strip_tags(description)[:2200]
@@ -296,13 +313,17 @@ def smartrecruiters_bosch() -> tuple[list[dict],int]:
 # Broader nationwide aggregator. Free German key can be stored ONLY as a
 # GitHub Actions secret JOOBLE_API_KEY, never in a public repository file.
 JOOBLE_TERMS = (
-    'Industrial Engineer', 'Produktionsplaner', 'Fertigungsplaner',
-    'Arbeitsvorbereitung', 'Fertigungssteuerung', 'Produktionssteuerung',
-    'Prozessoptimierung', 'Lean Management', 'Montageplanung',
-    'Produktionskoordinator', 'Arbeitsplanung', 'Fertigungsorganisation',
-    'Manufacturing Engineer', 'Process Engineer', 'Wertstromplanung',
+    'Produktionsplaner', 'Fertigungsplaner', 'Arbeitsvorbereitung',
+    'Industrial Engineer', 'Industrial Engineering', 'Manufacturing Engineer',
+    'Fabrikplaner', 'Materialflussplaner', 'Logistikplaner',
+    'Montageplanung', 'Fertigungssteuerung', 'Produktionssteuerung',
+    'Prozessoptimierung', 'Prozessplaner', 'Lean Management',
+    'Wertstromplanung', 'Arbeitsplanung', 'Produktionskoordinator',
     'Produktionslogistik', 'Fertigungsdisponent', 'Continuous Improvement',
+    'Manufacturing Planner', 'Production Planner', 'Industrialization Engineer',
+    'Kapazitätsplanung', 'REFA', 'KVP Manager',
 )
+
 
 
 def jooble_feed() -> tuple[list[dict],int]:
@@ -310,9 +331,9 @@ def jooble_feed() -> tuple[list[dict],int]:
     if not key:
         raise RuntimeError('Noch nicht aktiviert: kostenloser API-Schlüssel fehlt (GitHub Secret JOOBLE_API_KEY)')
     # 3 calls per run * 24 runs/day = 72 requests/day, under the documented 100/day free limit.
-    # The 18 job families are covered over six scheduled hours; prior matches are retained.
+    # The 27 job families are covered over nine scheduled hours; prior matches are retained.
     hour=int(dt.datetime.now(dt.timezone.utc).timestamp()//3600)
-    start=(hour % 6)*3
+    start=(hour % (len(JOOBLE_TERMS)//3))*3
     terms=JOOBLE_TERMS[start:start+3]
     out=[];calls=0
     endpoint='https://de.jooble.org/api/'+urllib.parse.quote(key,safe='')
@@ -322,7 +343,7 @@ def jooble_feed() -> tuple[list[dict],int]:
                          'companysearch':False}).encode('utf-8')
         req=urllib.request.Request(endpoint,data=body,headers={
             'Accept':'application/json','Content-Type':'application/json',
-            'User-Agent':'LuisaJobFinder/6.0 (private job finder)'},method='POST')
+            'User-Agent':'LuisaJobFinder/7.0 (private job finder)'},method='POST')
         try:
             with urllib.request.urlopen(req,timeout=25) as response:
                 payload=json.load(response)
@@ -382,6 +403,11 @@ def main() -> int:
         ('Bosch / SmartRecruiters', smartrecruiters_bosch),
         ('IBO GmbH / Personio', lambda: personio_feed('ibo-tec', 'IBO GmbH')),
         ('Polymedics / Personio', lambda: personio_feed('polymedics-innovations-gmbh','Polymedics')),
+        # Official public XML career boards verified for this region. Multi-location
+        # jobs remain visibly labeled with their complete source location string.
+        ('MR PLAN Group / Personio', lambda: personio_feed('mr-plan-gmbh','MR PLAN Group')),
+        ('BRIGHT Consulting / Personio', lambda: personio_feed('bright-consulting','BRIGHT Consulting')),
+        ('munerio / Personio', lambda: personio_feed('munerio','munerio consulting')),
         ('HELLER / RSS', heller_rss_feed),
         ('Nomado24', nomado_feed),
         *([('Jooble', jooble_feed)] if os.environ.get('JOOBLE_API_KEY') else []),
@@ -424,7 +450,7 @@ def main() -> int:
             by_key[key]=j
     result=sorted(by_key.values(),key=lambda x:(-x['matchScore'],-int(x['created'] or 0)))[:500]
     out={'schema':2,'generatedAt':TODAY,'region':'Kirchheim unter Teck, grob 20 km (Ortsliste)',
-         'profile':'Breite Suche: Industrial Engineering, Produktion, Prozessplanung, Arbeitsvorbereitung',
+         'profile':'V7: breite Regional- und Firmenfeeds – Industrial Engineering, Fabrik-/Produktions-/Materialflussplanung, Prozessoptimierung',
          'sources':sources,'jobs':result}
     OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Jobliste aktualisiert:',len(result),'Jobs;', [(s['name'],s['matched']) for s in sources])
