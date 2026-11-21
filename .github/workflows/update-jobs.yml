@@ -1,14 +1,13 @@
 
-name: Luisa JobFinder – Stellen automatisch suchen
+name: Luisa JobFinder - Stellen automatisch suchen
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '17 * * * *'
-  push:
-    paths:
-      - 'update_jobs.py'
-      - '.github/workflows/update-jobs.yml'
+    - cron: '0 12 * * *'
+      timezone: 'Europe/Berlin'
+    - cron: '0 18 * * *'
+      timezone: 'Europe/Berlin'
 
 permissions:
   contents: write
@@ -20,7 +19,7 @@ concurrency:
 jobs:
   update-jobs:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 25
 
     steps:
       - name: Repository laden
@@ -34,9 +33,10 @@ jobs:
       - name: Stellen automatisch suchen
         env:
           JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
+          JOOBLE_BATCH: ${{ github.event.schedule == '0 12 * * *' && 'first' || github.event.schedule == '0 18 * * *' && 'second' || 'manual' }}
         run: python update_jobs.py
 
-      - name: Stellenangebote aktualisieren
+      - name: Stellenliste aktualisieren
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
