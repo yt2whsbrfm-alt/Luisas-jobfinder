@@ -1,0 +1,12 @@
+{
+  "name":"Luisa JobFinder",
+  "short_name":"JobFinder",
+  "description":"Kostenlose persönliche Jobsuche, Merkliste und Bewerbungsübersicht",
+  "start_url":"./index.html",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#f4f6fc",
+  "theme_color":"#101b36",
+  "lang":"de",
+  "icons":[{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
