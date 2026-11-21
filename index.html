@@ -132,7 +132,6 @@
         {name:'stellenanzeigen.de',hint:'Weitere Stellenbörse; Suche dort mit dem ausgewählten Begriff starten.',type:'Portal öffnen',make:q=>'https://www.stellenanzeigen.de/'},
         {name:'HELLER (Nürtingen)',hint:'Offizielle Stellenliste des Maschinenbau-Unternehmens in Nürtingen; passende Rolle und Arbeitszeit selbst prüfen.',type:'Karriereseite',make:q=>'https://recruitment.heller.biz/stelle/stellenliste.aspx?LCID=1031'},
         {name:'ADS-TEC (Nürtingen)',hint:'Gezielte Suche nach Stellen bei ADS-TEC; Karriereseiten-Links können sich ändern.',type:'Firmensuche',make:q=>'https://www.google.com/search?q='+encodeURIComponent('site:adstec-karriere.dvinci-hr.com/de/jobs/ '+q)},
-        {name:'NEURA Robotics',hint:'Offizielle Karrierewebsite; Beschäftigungsort und Radius prüfen (häufig Riederich).',type:'Karriereseite',make:q=>'https://jobs.neura-robotics.com/de/'},
         {name:'Bosch Group',hint:'Öffentliche Karriereübersicht. Ort und Anforderung im Portal prüfen.',type:'Karriereseite',make:q=>'https://careers.smartrecruiters.com/RobertBosch'}
       ];
       function slugify(s){return String(s).normalize('NFKD').replace(/[\u0300-\u036f]/g,'').toLocaleLowerCase('de-DE').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'stellen';}
