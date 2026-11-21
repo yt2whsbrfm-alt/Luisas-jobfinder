@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-21T12:02:42+00:00",
+  "generatedAt": "2026-11-21T12:15:30+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
   "profile": "Breite Suche: Industrial Engineering, Produktion, Prozessplanung, Arbeitsvorbereitung",
   "sources": [
@@ -39,6 +39,12 @@
       "ok": true,
       "pages": 1,
       "matched": 0
+    },
+    {
+      "name": "Jooble",
+      "ok": true,
+      "pages": 3,
+      "matched": 1
     }
   ],
   "jobs": [
@@ -58,7 +64,26 @@
       ],
       "workingHoursConfirmed": true,
       "firstFound": "2026-11-21T11:57:53+00:00",
-      "lastSeen": "2026-11-21T12:02:42+00:00"
+      "lastSeen": "2026-11-21T12:15:30+00:00"
+    },
+    {
+      "id": "jooble:-6560564111239911362",
+      "source": "Jooble",
+      "title": "Fertigungsplaner/-in Montage (m/w/d)",
+      "company": "Da Vinci Engineering GmbH",
+      "location": "Plochingen",
+      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Fertigungsplaner&rgn=681&pos=2&groupId=20182&elckey=1207937186880298887&p=1&aq=1985243124981351317&cid=734&jobAge=636&brelb=100&bscr=35.373684&scr=35.373684",
+      "description": "...wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/ -in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative Mitarbeiter:innen, die etwas...",
+      "created": 1792978414643,
+      "matchScore": 78,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: fertigung, montage",
+        "Arbeitszeit in Originalanzeige prüfen"
+      ],
+      "workingHoursConfirmed": false,
+      "firstFound": "2026-11-21T12:15:30+00:00",
+      "lastSeen": "2026-11-21T12:15:30+00:00"
     }
   ]
 }
