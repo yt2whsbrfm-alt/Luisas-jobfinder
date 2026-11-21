@@ -195,7 +195,7 @@ def get_text(url: str, *, tries: int=2) -> str:
     for attempt in range(tries):
         try:
             req = urllib.request.Request(url, headers={
-                'User-Agent': 'LuisaJobFinder/8.0 (public employer job feed reader)',
+                'User-Agent': 'LuisaJobFinder/9.0 (public employer job feed reader)',
                 'Accept': 'application/xml, application/rss+xml, application/json, text/xml, */*'})
             with urllib.request.urlopen(req, timeout=20) as response:
                 return response.read(10_000_000).decode('utf-8-sig', errors='replace')
@@ -270,7 +270,7 @@ def get_json(url: str, *, tries: int=2) -> dict:
     last = None
     for attempt in range(tries):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/8.0 (public job feed reader)', 'Accept':'application/json'})
+            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/9.0 (public job feed reader)', 'Accept':'application/json'})
             with urllib.request.urlopen(req,timeout=20) as response:
                 raw=response.read(10_000_000)
             return json.loads(raw)
@@ -378,11 +378,20 @@ def jooble_feed() -> tuple[list[dict],int]:
     key=os.environ.get('JOOBLE_API_KEY','').strip()
     if not key:
         raise RuntimeError('Noch nicht aktiviert: kostenloser API-Schlüssel fehlt (GitHub Secret JOOBLE_API_KEY)')
-    # 3 calls per run * 24 runs/day = 72 requests/day, under the documented 100/day free limit.
-    # The 36 job families are covered over twelve scheduled hours; prior matches are retained.
-    hour=int(dt.datetime.now(dt.timezone.utc).timestamp()//3600)
-    start=(hour % (len(JOOBLE_TERMS)//3))*3
-    terms=JOOBLE_TERMS[start:start+3]
+    # Two scheduled searches daily: 18 terms at noon, 18 terms at 18:00 Europe/Berlin.
+    # 36 queries/day total, below Jooble's stated 100-per-day free allowance.
+    # A manual run performs only 3 queries so debugging uses minimal quota.
+    batch=os.environ.get('JOOBLE_BATCH','manual').strip().lower()
+    midpoint=(len(JOOBLE_TERMS)+1)//2
+    if batch == 'first':
+        terms=JOOBLE_TERMS[:midpoint]
+    elif batch == 'second':
+        terms=JOOBLE_TERMS[midpoint:]
+    else:
+        hour=int(dt.datetime.now(dt.timezone.utc).timestamp()//3600)
+        start=(hour % (len(JOOBLE_TERMS)//3))*3
+        terms=JOOBLE_TERMS[start:start+3]
+    print(f'Jooble Suchgruppe: {batch}; Suchbegriffe: {len(terms)}')
     out=[];calls=0
     endpoint='https://de.jooble.org/api/'+urllib.parse.quote(key,safe='')
     for term in terms:
@@ -391,7 +400,7 @@ def jooble_feed() -> tuple[list[dict],int]:
                          'companysearch':False}).encode('utf-8')
         req=urllib.request.Request(endpoint,data=body,headers={
             'Accept':'application/json','Content-Type':'application/json',
-            'User-Agent':'LuisaJobFinder/8.0 (private job finder)'},method='POST')
+            'User-Agent':'LuisaJobFinder/9.0 (private job finder)'},method='POST')
         try:
             with urllib.request.urlopen(req,timeout=25) as response:
                 payload=json.load(response)
@@ -504,7 +513,7 @@ def main() -> int:
             by_key[key]=j
     result=sorted(by_key.values(),key=lambda x:(-x['matchScore'],-int(x['created'] or 0)))[:500]
     out={'schema':2,'generatedAt':TODAY,'region':'Kirchheim unter Teck, grob 20 km (Ortsliste)',
-         'profile':'V8: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination',
+         'profile':'V9: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination',
          'sources':sources,'jobs':result}
     OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Jobliste aktualisiert:',len(result),'Jobs;', [(s['name'],s['matched']) for s in sources])
