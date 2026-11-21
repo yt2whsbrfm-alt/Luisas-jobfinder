@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-21T11:46:05+00:00",
+  "generatedAt": "2026-11-21T11:57:53+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
   "profile": "Industrial Engineering / Produktionsplanung / Arbeitsvorbereitung",
   "sources": [
@@ -15,7 +15,122 @@
       "ok": true,
       "pages": 16,
       "matched": 0
+    },
+    {
+      "name": "NEURA Robotics / Ashby",
+      "ok": true,
+      "pages": 1,
+      "matched": 4
+    },
+    {
+      "name": "IBO GmbH / Personio",
+      "ok": true,
+      "pages": 1,
+      "matched": 1
+    },
+    {
+      "name": "Polymedics / Personio",
+      "ok": true,
+      "pages": 1,
+      "matched": 0
+    },
+    {
+      "name": "HELLER / RSS",
+      "ok": true,
+      "pages": 1,
+      "matched": 0
     }
   ],
-  "jobs": []
+  "jobs": [
+    {
+      "id": "neura-robotics-/-ashby:f97ad4d3-2011-4746-8b1c-e8207fd135f1",
+      "source": "NEURA Robotics / Ashby",
+      "title": "Industrial Engineer / Value Stream Planner (Mensch)",
+      "company": "NEURA Robotics",
+      "location": "Metzingen / Riederich",
+      "url": "https://jobs.ashbyhq.com/neura-robotics-gmbh/f97ad4d3-2011-4746-8b1c-e8207fd135f1",
+      "description": "Deine Mission & Herausforderungen Gemeinsam gehen wir den nächsten Schritt in die Ära kognitiver und humanoider Robotik. Als praxisorientierter Wertstromplaner / Industrial Engineer gestaltest du die Zukunft unserer Fertigungssysteme und baust die Elemente des NEURA Produktionssystems aktiv mit auf. Du arbeitest an der Schnittstelle zwischen Entwicklung, Produktion, Qualität, Logistik und Anlagenbau – mit dem Ziel, Produktionssysteme sowie Wert- und Datenströme effizient, stabil und zukunftsfähig auszulegen. Dein Ziel: Durch Lean-Prinzipien, datenbasierte Wertstrom- und Prozessanalysen sowie innovative technische Ansätze digitale, effiziente, robuste und skalierbare Fertigungskonzepte zu schaffen. Deine Hauptaufgaben umfassen: - Du betreust, optimierst und stabilisierst Wertströme – von der Rohmateriallogistik bis zum fertigen Robotersystem. - Du unterstützt Produkt- und Prozessfreigaben im Serienanlauf und steuerst technische Änderungen. - Du analysierst Produktions- und Arbeitsabläufe, identifizierst Engpässe und entwickelst nachhaltige Verbesserungsmaßnahmen. - Du wendest Lean-Methoden und Wertstromanalysen an, um Verschwendung in Material-, Informations- und Datenflüssen systematisch zu reduzieren und die Standards im Produktionssystem kontinuierlich zu verbessern. - Du unterstützt die Einführung neuer Methoden sowie robotergestützter, automatisierter Fertigungsanlagen einschließlich der erforderlichen Digitalisierungsschritte und IT-Prozesse (MES, Datenanalyse). - Du gestaltest Material-, Informations- und Datenflüsse, führst Zeitstudien und Layoutanalysen durch und le",
+      "created": 1778096679271,
+      "matchScore": 92,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: anlauf, fertigung, fmea"
+      ],
+      "workingHoursConfirmed": true,
+      "firstFound": "2026-11-21T11:57:53+00:00",
+      "lastSeen": "2026-11-21T11:57:53+00:00"
+    },
+    {
+      "id": "ibo-gmbh-/-personio:2885916",
+      "source": "IBO GmbH / Personio",
+      "title": "Arbeitsvorbereitung CNC (m/w/d) - Schwerpunkt Prozessoptimierung",
+      "company": "IBO GmbH",
+      "location": "Kirchheim unter Teck",
+      "url": "https://ibo-tec.jobs.personio.de/job/2885916?language=de",
+      "description": "Eigenständige Erstellung, Optimierung und Pflege von CNC-Programmen mit Mazatrol (Schwerpunkt Dreh-/Fräszentren), inkl. Einstellblätter Programmierung und Simulation in PC-Umgebung und direkt an der Maschine Analyse und Optimierung bestehender Programme hinsichtlich Qualität, Laufzeit und Wirtschaftlichkeit Unterstützung bei der Einführung neuer Werkzeuge, Spannmittel und Bearbeitungsstrategien Enge Zusammenarbeit mit Fertigung, Qualitätssicherung und Arbeitsvorbereitung Technische Dokumentation von Programmen und Prozessen Perspektivisch: Mitwirkung in der Fertigungsplanung Unterstützung bei Kapazitäts- und Ablaufplanung Prozessanalyse und kontinuierliche Verbesserung der Produktionsabläufe Abgeschlossene Ausbildung im Bereich Zerspanungstechnik, Industriemechanik oder vergleichbar Fundiertes Verständnis der CNC-Programmierung Fähigkeit, CNC-Programme sicher zu erstellen und zu optimieren SolidWorks-Kenntnisse von Vorstel Bereitschaft und Fähigkeit, sich innerhalb kurzer Zeit – unterstützt durch externe Schulungen – gezielt in Mazatrol einzuarbeiten Idealerweise erste Erfahrung mit Mazatrol oder Mazak-Steuerungen Selbstständige, strukturierte und lösungsorientierte Arbeitsweise Hohes Qualitätsbewusstsein und ausgeprägtes technisches Verständnis Teamfähigkeit und Verantwortungsbewusstsein Moderner, digital unterstützter Arbeitsplatz in einem innovativen Unternehmen der Präzisions- und Wälzlagertechnik Kurze Entscheidungswege und flache Hierarchien Abwechslungsreiche Aufgaben mit Eigenverantwortung Möglichkeiten zur fachlichen und persönlichen Weiterentwicklung Ein engagiert",
+      "created": 1794476987000,
+      "matchScore": 87,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: arbeitsvorbereitung, fertigung, kapazitaet"
+      ],
+      "workingHoursConfirmed": true,
+      "firstFound": "2026-11-21T11:57:53+00:00",
+      "lastSeen": "2026-11-21T11:57:53+00:00"
+    },
+    {
+      "id": "neura-robotics-/-ashby:fd5b5e59-1c4f-4df4-bad6-3fb38c1091bc",
+      "source": "NEURA Robotics / Ashby",
+      "title": "Fertigungssteuerer (Mensch)",
+      "company": "NEURA Robotics",
+      "location": "Metzingen / Riederich",
+      "url": "https://jobs.ashbyhq.com/neura-robotics-gmbh/fd5b5e59-1c4f-4df4-bad6-3fb38c1091bc",
+      "description": "Willkommen bei NEURA Robotics, dem Innovator der Robotikwelt. Unser Ziel ist es, kollaborative Roboter mit bahnbrechenden kognitiven Fähigkeiten auszustatten, um eine sichere und intuitive Zusammenarbeit mit Menschen zu ermöglichen. Unter der Leitung von Gründer David Reger haben wir in den ersten Jahren von NEURA Robotics die Grundlage geschaffen, damit Mensch und Roboter Hand in Hand arbeiten können. \"We serve humanity\" ist dabei nicht nur ein Motto, sondern unsere Mission. Werde Teil unseres aufstrebenden, internationalen Unternehmens und gestalte die Zukunft der Robotik mit uns. Willkommen bei NEURA Robotics – wo Innovation auf Teamgeist trifft. Deine Mission & Herausforderungen Als Fertigungssteuerer übernimmst du die Steuerung und Feinterminierung von Fertigungsaufträgen, um eine optimale Produktion und termingerechte Lieferungen sicherzustellen. Deine Hauptaufgaben umfassen: - Detaillierte Steuerung und Feinterminierung von Fertigungsaufträgen zur Sicherstellung optimaler Produktionsabläufe - Planung, Einlastung und Terminüberwachung von Fertigungsaufträgen unter Berücksichtigung von Kapazitäten und Materialverfügbarkeit - Enge Zusammenarbeit mit dem Industrial Engineering zur kontinuierlichen Optimierung der Produktionsprozesse - Koordination zwischen den Abteilungen Produktion, Einkauf und Logistik zur Sicherstellung einer reibungslosen Produktion - Überwachung der Kapazitätsauslastung und frühzeitige Identifikation sowie Behebung von Engpässen - Erstellung, Pflege und Anpassung von Fertigungsplänen zur Sicherstellung termingerechter Lieferungen - Analyse und konti",
+      "created": 1793977175164,
+      "matchScore": 84,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: fertigung, industrial engineering, kapazitaet"
+      ],
+      "workingHoursConfirmed": true,
+      "firstFound": "2026-11-21T11:57:53+00:00",
+      "lastSeen": "2026-11-21T11:57:53+00:00"
+    },
+    {
+      "id": "neura-robotics-/-ashby:1d802641-b502-4fcd-bd28-dc5a81912100",
+      "source": "NEURA Robotics / Ashby",
+      "title": "Process Engineer (Mensch)",
+      "company": "NEURA Robotics",
+      "location": "Metzingen / Riederich",
+      "url": "https://jobs.ashbyhq.com/neura-robotics-gmbh/1d802641-b502-4fcd-bd28-dc5a81912100",
+      "description": "DEINE MISSION & HERAUSFORDERUNGEN Du übernimmst die Verantwortung für unsere Produktionsabläufe und sorgst dafür, dass sie nicht nur laufen, sondern richtig rund laufen. Konkret heißt das: - Analyse der bestehenden Produktionsabläufe und Prozesse an den Arbeitsplätzen – du findest heraus, wo noch Potenzial steckt. - Wenn's mal klemmt, bist du zur Stelle: Fehlerursachen analysieren und daraus konkrete Maßnahmen für Prozessanpassungen ableiten. - Leitung von Arbeitsteams, wenn es um die Umsetzung von Anpassungen und kontinuierliche Verbesserungen in der Arbeitsplatzbeschreibung geht. - Entscheidungsvorlagen fürs Management vorbereiten – verständlich, fundiert, auf den Punkt. - Als Schnittstelle zum Engineering bringst du Anforderungen für Designanpassungen ein. - Prozesskennzahlen definieren, mit denen wir Qualität und Produktivität in der Produktion messen und im Blick behalten. WAS DU MITBRINGST - Komplexe Daten durchdringen und daraus die richtigen Schlüsse ziehen – kein Problem für dich. - Lean Management, Six Sigma oder Prozesssimulation sind für dich keine Fremdwörter. - Auch bei mehreren Baustellen gleichzeitig behältst du als Projektleiter den Überblick. - Die Prozessqualität hast du im Blick und sorgst für die Einhaltung von Industriestandards. - Kostensenkungspotenziale erkennst du und setzt sie in die Praxis um. - Neue Technologien und technische Anlagen wecken deine Neugier statt Skepsis. - Teamarbeit, klare Kommunikation und ein Stück Führungsqualität gehören für dich einfach dazu.",
+      "created": 1786623535242,
+      "matchScore": 77,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: lean, produktion, projekt"
+      ],
+      "workingHoursConfirmed": true,
+      "firstFound": "2026-11-21T11:57:53+00:00",
+      "lastSeen": "2026-11-21T11:57:53+00:00"
+    },
+    {
+      "id": "neura-robotics-/-ashby:eabf8f9b-8b8d-4181-90e5-1b7d10b65f90",
+      "source": "NEURA Robotics / Ashby",
+      "title": "Process Engineer (Human)",
+      "company": "NEURA Robotics",
+      "location": "Metzingen / Riederich",
+      "url": "https://jobs.ashbyhq.com/neura-robotics-gmbh/eabf8f9b-8b8d-4181-90e5-1b7d10b65f90",
+      "description": "YOUR MISSION & CHALLENGES You'll take ownership of our production processes and make sure they don't just run – they run smoothly. In practice, that means: - Analyzing existing production workflows and processes at each workstation to spot where there's room to improve. - Getting to the bottom of things when disruptions pop up: digging into root causes and turning findings into concrete process adjustments. - Leading work teams through the implementation of changes and continuous improvement initiatives in workstation design. - Preparing decision papers for management – clear, well-founded, and to the point. - Acting as the interface to Engineering, bringing forward requirements for design changes. - Defining process KPIs to measure and track quality and productivity in production. WHAT WE CAN LOOK FORWARD TO - Digging through complex data and drawing the right conclusions – no problem for you. - Lean Management, Six Sigma, or process simulation are second nature to you. - Keeping the overview as a project lead even with several things going on at once. - A close eye on process quality, making sure industry standards are met. - Spotting cost-saving potential and knowing how to put it into practice. - New technologies and technical systems spark your curiosity, not your skepticism. - Teamwork, clear communication, and a bit of leadership are simply part of who you are.",
+      "created": 1786623531378,
+      "matchScore": 68,
+      "why": [
+        "Passender Tätigkeitsbereich",
+        "Erfahrung passt: lean"
+      ],
+      "workingHoursConfirmed": true,
+      "firstFound": "2026-11-21T11:57:53+00:00",
+      "lastSeen": "2026-11-21T11:57:53+00:00"
+    }
+  ]
 }
