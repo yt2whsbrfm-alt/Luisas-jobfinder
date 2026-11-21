@@ -1,0 +1,39 @@
+
+name: Luisa JobFinder – Stellen automatisch suchen
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+  push:
+    paths:
+      - 'update_jobs.py'
+      - '.github/workflows/update-jobs.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: luisa-jobfinder-refresh
+  cancel-in-progress: false
+
+jobs:
+  update-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Öffentliche Stellenquellen abfragen
+        run: python update_jobs.py
+      - name: Neue Liste veröffentlichen
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add jobs.json
+          if ! git diff --cached --quiet; then
+            git commit -m "Update automatic job matches"
+            git push
+          fi
