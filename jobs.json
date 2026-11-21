@@ -1,8 +1,8 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-21T12:15:30+00:00",
+  "generatedAt": "2026-11-21T12:42:50+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
-  "profile": "Breite Suche: Industrial Engineering, Produktion, Prozessplanung, Arbeitsvorbereitung",
+  "profile": "V7: breite Regional- und Firmenfeeds – Industrial Engineering, Fabrik-/Produktions-/Materialflussplanung, Prozessoptimierung",
   "sources": [
     {
       "name": "Arbeitnow",
@@ -20,10 +20,29 @@
       "name": "IBO GmbH / Personio",
       "ok": true,
       "pages": 1,
-      "matched": 1
+      "matched": 0
     },
     {
       "name": "Polymedics / Personio",
+      "ok": true,
+      "pages": 1,
+      "matched": 0
+    },
+    {
+      "name": "MR PLAN Group / Personio",
+      "ok": true,
+      "pages": 1,
+      "matched": 0
+    },
+    {
+      "name": "BRIGHT Consulting / Personio",
+      "ok": false,
+      "pages": 0,
+      "matched": 0,
+      "message": "Öffentlicher Feed nicht erreichbar: HTTPError"
+    },
+    {
+      "name": "munerio / Personio",
       "ok": true,
       "pages": 1,
       "matched": 0
@@ -72,18 +91,18 @@
       "title": "Fertigungsplaner/-in Montage (m/w/d)",
       "company": "Da Vinci Engineering GmbH",
       "location": "Plochingen",
-      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Fertigungsplaner&rgn=681&pos=2&groupId=20182&elckey=1207937186880298887&p=1&aq=1985243124981351317&cid=734&jobAge=636&brelb=100&bscr=35.373684&scr=35.373684",
-      "description": "...wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/ -in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative Mitarbeiter:innen, die etwas...",
+      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Montageplanung&rgn=681&pos=9&groupId=0&elckey=234760975038250212&p=1&aq=-2535481721840067468&cid=734&jobAge=637&brelb=100&bscr=15.227829&scr=15.227829",
+      "description": "...Fertigungs- und Montagetechnik: praktische Planungs- und Projekterfahrung im Fertigungsumfeld, Erfahrung in der Fertigungs- oder Montageplanung, BPS-Kenntnisse bzgl. Wertstrom- und Linienplanung; Erfahrung bei der Anwendung der Zeitwirtschaftsmethodik MTM...",
       "created": 1792978414643,
-      "matchScore": 78,
+      "matchScore": 84,
       "why": [
         "Passender Tätigkeitsbereich",
-        "Erfahrung passt: fertigung, montage",
+        "Erfahrung passt: fertigung, montage, projekt",
         "Arbeitszeit in Originalanzeige prüfen"
       ],
       "workingHoursConfirmed": false,
       "firstFound": "2026-11-21T12:15:30+00:00",
-      "lastSeen": "2026-11-21T12:15:30+00:00"
+      "lastSeen": "2026-11-21T12:42:50+00:00"
     }
   ]
 }
