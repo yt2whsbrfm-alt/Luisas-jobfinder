@@ -1,1 +1,21 @@
-{"schema":2,"generatedAt":null,"region":"Kirchheim unter Teck, grob 20 km (Ortsliste)","profile":"Industrial Engineering / Produktionsplanung / Arbeitsvorbereitung","sources":[],"jobs":[]}
+{
+  "schema": 2,
+  "generatedAt": "2026-11-21T11:46:05+00:00",
+  "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
+  "profile": "Industrial Engineering / Produktionsplanung / Arbeitsvorbereitung",
+  "sources": [
+    {
+      "name": "Arbeitnow",
+      "ok": true,
+      "pages": 1,
+      "matched": 0
+    },
+    {
+      "name": "Bosch / SmartRecruiters",
+      "ok": true,
+      "pages": 16,
+      "matched": 0
+    }
+  ],
+  "jobs": []
+}
