@@ -4,7 +4,9 @@ Only documented public job posting endpoints. Standard-library-only.
 """
 from __future__ import annotations
 import datetime as dt
+import email.utils
 import html
+import xml.etree.ElementTree as ET
 import json
 import re
 import sys
@@ -26,6 +28,7 @@ AREA = (
  'unterlenningen','owen','wendlingen','koengen','wernau','nuertingen','oberboihingen',
  'unterensingen','frickenhausen','grossbettlingen','neuffen','beuren','neckartailfingen',
  'neckartenzlingen','altenriet','schlaitdorf','reudern','aichtal','wolfschlugen','plochingen',
+ 'riederich','metzingen',
  'altbach','deizisau','reichenbach an der fils','hochdorf','hattenhofen','schlierbach',
  'ebersbach an der fils','albershausen','bad boll','zell unter aichelberg','aichelberg',
  'gammelshausen','denkendorf','baltmannsweiler','jesingen','oetlingen',
@@ -42,6 +45,8 @@ KEYWORDS = {
  'prozessingenieur':23,'prozesstechnolog':23,'operational excellence':25,
  'technischer projektkoordinator':22,'wertstrom':27,'re fa':18,'refa':24,
  'fertigungsorganisation':27,'operations planner':27,'projektkoordinator produktion':24,
+ 'value stream planner':33,'layoutplanner':29,'process engineer':27,
+ 'production steering':30,'quality engineer production':24,
 }
 SKILLS = {'montage','lean','fmea','apqp','planzeit','taktzeit','kapazitaet','line balancing',
  'wertstrom','pdca','shopfloor','arbeitsvorbereitung','prozess','vorrichtung','beschaffung',
@@ -82,8 +87,8 @@ def fulltime_ok(title: str, text: str, employment: str='') -> bool:
     title_n = norm(title)
     if any(x in title_n for x in BLACKLIST): return False
     e = norm(employment)
-    if ('part time' in e or 'part-time' in e or 'teilzeit' in e) and not ('full time' in e or 'full-time' in e or 'vollzeit' in e): return False
-    if ('teilzeit' in title_n or 'part time' in title_n or 'part-time' in title_n) and not ('vollzeit' in title_n or 'full time' in title_n or 'full-time' in title_n): return False
+    if ('part time' in e or 'part-time' in e or 'teilzeit' in e) and not ('full time' in e or 'full-time' in e or 'fulltime' in e or 'vollzeit' in e): return False
+    if ('teilzeit' in title_n or 'part time' in title_n or 'part-time' in title_n) and not ('vollzeit' in title_n or 'full time' in title_n or 'full-time' in title_n or 'fulltime' in title_n): return False
     # If no explicit time appears, status is unknown; job is included but flagged accordingly.
     return True
 
@@ -96,8 +101,11 @@ def score_job(title: str, desc: str) -> tuple[int, list[str]]:
     score = min(96, 38 + tp + min(21, len(relevant)*3))
     reasons = ['Passender Tätigkeitsbereich']
     if relevant: reasons.append('Erfahrung passt: '+', '.join(sorted(relevant)[:3]))
-    if ('abgeschlossenes studium' in d or 'university degree' in d or 'bachelor' in d) and not re.search(r'(oder vergleichbare|vergleichbare qualifikation|alternativ|equivalent experience)',d):
-        score -= 12
+    alternative = bool(re.search(r'(oder vergleichbare|vergleichbare qualifikation|alternativ|equivalent experience|gleichwertige berufserfahrung|gleichwertige qualifikation)', d))
+    if not alternative and re.search(r'(abgeschlossenes masterstudium|masterabschluss|master.s degree)',d):
+        return 0, []  # Luisa hat keinen nachgewiesenen Master; nicht als passend ausgeben.
+    if not alternative and re.search(r'(abgeschlossenes studium|hochschulabschluss|university degree|bachelorabschluss)',d):
+        score -= 18
         reasons.append('Studienanforderung im Original prüfen')
     if 'senior' in title_n or 'lead ' in title_n or 'leiter' in title_n: score -= 7
     return max(0, min(96,score)), reasons
@@ -108,7 +116,112 @@ def stamp(value: Any) -> int:
         return int(value * 1000 if value < 100000000000 else value)
     if not value: return 0
     try: return int(dt.datetime.fromisoformat(str(value).replace('Z','+00:00')).timestamp()*1000)
-    except (ValueError,TypeError): return 0
+    except (ValueError,TypeError):
+        try: return int(email.utils.parsedate_to_datetime(str(value)).timestamp()*1000)
+        except (ValueError, TypeError, IndexError): return 0
+
+
+def get_text(url: str, *, tries: int=2) -> str:
+    """Fetch small, publicly advertised job feeds; no authentication or HTML scraping."""
+    last = None
+    for attempt in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={
+                'User-Agent': 'LuisaJobFinder/5.0 (public employer job feed reader)',
+                'Accept': 'application/xml, application/rss+xml, application/json, text/xml, */*'})
+            with urllib.request.urlopen(req, timeout=20) as response:
+                return response.read(10_000_000).decode('utf-8-sig', errors='replace')
+        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError) as exc:
+            last = exc
+            if attempt + 1 < tries: time.sleep(1)
+    raise RuntimeError(f'Öffentlicher Feed nicht erreichbar: {type(last).__name__}')
+
+
+def xml_child_text(elem: ET.Element, tag: str) -> str:
+    node = elem.find(tag)
+    return ''.join(node.itertext()).strip() if node is not None else ''
+
+
+def personio_feed(slug: str, company: str) -> tuple[list[dict], int]:
+    """Official public Personio XML: {slug}.jobs.personio.de/xml?language=de"""
+    raw = get_text(f'https://{slug}.jobs.personio.de/xml?language=de')
+    root = ET.fromstring(raw)
+    if root.tag != 'workzag-jobs':
+        raise ValueError(f'Personio XML unerwartet: {root.tag}')
+    results = []
+    for item in root.findall('position'):
+        title = xml_child_text(item, 'name')
+        office = xml_child_text(item, 'office')
+        # The exact employer's career site identifies IBO's "IBO Kirchheim" as Kirchheim unter Teck.
+        if slug == 'ibo-tec' and norm(office) in ('ibo kirchheim', 'kirchheim'):
+            office = 'Kirchheim unter Teck'
+        if not location_ok(office) or not title_points(title): continue
+        posting_id = xml_child_text(item, 'id')
+        if not posting_id: continue
+        desc = ' '.join(xml_child_text(d, 'value') for d in item.findall('./jobDescriptions/jobDescription'))
+        schedule = xml_child_text(item, 'schedule')
+        # Only unambiguously full-time Personio job ads are eligible.
+        if norm(schedule) not in ('full-time','full time','vollzeit'): continue
+        url = f'https://{slug}.jobs.personio.de/job/{urllib.parse.quote(posting_id, safe="")}?' + 'language=de'
+        job = job_obj(f'{company} / Personio', title, company, office, url, desc,
+                      xml_child_text(item, 'createdAt'), posting_id,
+                      'full-time')
+        if job: results.append(job)
+    return results, 1
+
+
+def ashby_neura_feed() -> tuple[list[dict], int]:
+    """Ashby public Job Postings API – documented and keyless."""
+    data = get_json('https://api.ashbyhq.com/posting-api/job-board/neura-robotics-gmbh')
+    items = data.get('jobs')
+    if not isinstance(items, list): raise ValueError('Ashby API-Format ungültig')
+    out = []
+    for item in items:
+        if not item.get('isListed', True): continue
+        if norm(item.get('employmentType')) not in ('fulltime', 'full-time', 'full time'): continue
+        title = item.get('title') or ''
+        if not title_points(title): continue
+        primary = item.get('location') or ''
+        addr = (item.get('address') or {}).get('postalAddress') or {}
+        localities = [primary, addr.get('addressLocality') or '']
+        localities.extend((x or {}).get('location','') for x in (item.get('secondaryLocations') or []))
+        site = next((str(x) for x in localities if location_ok(str(x))), '')
+        if not site: continue
+        apply_url = item.get('jobUrl') or item.get('applyUrl') or ''
+        if not apply_url.startswith('https://'): continue
+        ident = str(item.get('id') or apply_url)
+        desc = item.get('descriptionPlain') or item.get('descriptionHtml') or ''
+        job = job_obj('NEURA Robotics / Ashby', title, 'NEURA Robotics', site, apply_url,
+                      desc, item.get('publishedAt'), ident, 'FullTime')
+        if job: out.append(job)
+    return out, 1
+
+
+def heller_rss_feed() -> tuple[list[dict], int]:
+    """HELLER expressly publishes an 'Alle Stellenangebote' RSS feed."""
+    raw = get_text('https://recruitment.heller.biz/handlers/offerRss.ashx?LCID=1031')
+    root = ET.fromstring(raw)
+    if root.tag not in ('rss','RDF'): raise ValueError('HELLER RSS-Format ungültig')
+    out=[]
+    for item in root.findall('.//item'):
+        title=xml_child_text(item,'title')
+        link=xml_child_text(item,'link')
+        if link.startswith('http://recruitment.heller.biz/'):
+            link='https://'+link[len('http://'):]
+        desc=xml_child_text(item,'description')
+        plain=strip_tags(desc)
+        # Do not assume that every HELLER vacancy is in Nürtingen.
+        if not re.search(r'nu[eü]rtingen|72622',norm(plain+' '+title)):
+            continue
+        if not re.search(r'vollzeit|full.time',norm(plain)):
+            # RSS may omit working hours: this remains provisional in the UI.
+            employment=''
+        else:
+            employment='Vollzeit'
+        job=job_obj('HELLER / RSS',title,'HELLER', 'Nürtingen',link,plain,
+                    xml_child_text(item,'pubDate'),link,employment)
+        if job:out.append(job)
+    return out,1
 
 
 def get_json(url: str, *, tries: int=2) -> dict:
@@ -133,7 +246,7 @@ def job_obj(source: str,title: str,company: str,location: str,url: str,descripti
     if points < 55: return None
     time_ms=stamp(created)
     if time_ms and (time.time()*1000 - time_ms) > MAX_JOB_AGE_DAYS*86400*1000: return None
-    known_hours = bool(re.search('vollzeit|full.time',norm(f'{title} {employment} {desc}')))
+    known_hours = bool(re.search(r'vollzeit|full[ -]?time',norm(f'{title} {employment} {desc}')))
     if not known_hours: why.append('Arbeitszeit in Originalanzeige prüfen')
     return {'id':f'{source.lower().replace(" ", "-")}:{unique_id}', 'source':source,
       'title':str(title)[:170], 'company':str(company)[:100], 'location':str(location)[:180],
@@ -198,7 +311,15 @@ def load_prior() -> dict:
 def main() -> int:
     prior=load_prior()
     all_jobs=[];sources=[]
-    for label,fn in [('Arbeitnow',arbeitnow_feed),('Bosch / SmartRecruiters',smartrecruiters_bosch)]:
+    feeds = [
+        ('Arbeitnow', arbeitnow_feed),
+        ('Bosch / SmartRecruiters', smartrecruiters_bosch),
+        ('NEURA Robotics / Ashby', ashby_neura_feed),
+        ('IBO GmbH / Personio', lambda: personio_feed('ibo-tec', 'IBO GmbH')),
+        ('Polymedics / Personio', lambda: personio_feed('polymedics-innovations-gmbh','Polymedics')),
+        ('HELLER / RSS', heller_rss_feed),
+    ]
+    for label,fn in feeds:
         try:
             entries,pages=fn()
             all_jobs.extend(entries)
