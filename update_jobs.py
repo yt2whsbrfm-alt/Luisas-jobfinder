@@ -29,7 +29,8 @@ AREA = (
  'unterlenningen','owen','wendlingen','koengen','wernau','nuertingen','oberboihingen',
  'unterensingen','frickenhausen','grossbettlingen','neuffen','beuren','neckartailfingen',
  'neckartenzlingen','altenriet','schlaitdorf','reudern','aichtal','wolfschlugen','plochingen',
- 'riederich','metzingen',
+ 'riederich','metzingen','esslingen am neckar','esslingen','neuhausen auf den fildern',
+ 'aichwald','lichtenwald','bempflingen',
  'altbach','deizisau','reichenbach an der fils','hochdorf','hattenhofen','schlierbach',
  'ebersbach an der fils','albershausen','bad boll','zell unter aichelberg','aichelberg',
  'gammelshausen','denkendorf','baltmannsweiler','jesingen','oetlingen',
@@ -62,6 +63,10 @@ KEYWORDS = {
  'lean coordinator':26,'produktionscontroller':23,'industrial engineer specialist':30,
  'kvp manager':26,'kontinuierliche verbesser':25,
  'technische projektkoordination':25,'projektplanung fertigung':26,
+ 'logistikplanung':28,'planungsingenieur produktion':29,'prozesskoordinator':25,
+ 'supply chain planner':26,'npi coordinator':26,'operations excellence':26,
+ 'prozessmanagement produktion':27,'manufacturing specialist':25,
+ 'produktentstehungsprozess':22,'produktionsmanagement':25,
 }
 SKILLS = {'montage','lean','fmea','apqp','planzeit','taktzeit','kapazitaet','line balancing',
  'wertstrom','pdca','shopfloor','arbeitsvorbereitung','prozess','vorrichtung','beschaffung',
@@ -109,30 +114,69 @@ def fulltime_ok(title: str, text: str, employment: str='') -> bool:
 
 
 def score_job(title: str, desc: str) -> tuple[int, list[str]]:
-    title_n, d = norm(title), norm(desc)[:3500]
+    """Conservative, explainable match, *not* a hiring probability.
+
+    Avoid optimistic scores for roles with mandatory domain credentials
+    (CNC programming, regulated lab professions, etc.). Generic coordination
+    titles are only included when tasks demonstrate a production-planning role.
+    """
+    title_n, d = norm(title), norm(desc)[:6500]
     tp = title_points(title_n)
-    if not tp: return 0, []
-    relevant = [s for s in SKILLS if s in d]
-    score = min(96, 38 + tp + min(21, len(relevant)*3))
-    reasons = ['Passender Tätigkeitsbereich']
-    if relevant: reasons.append('Erfahrung passt: '+', '.join(sorted(relevant)[:3]))
-    alternative = bool(re.search(r'(oder vergleichbare|vergleichbare qualifikation|alternativ|equivalent experience|gleichwertige berufserfahrung|gleichwertige qualifikation)', d))
-    if not alternative and re.search(r'(abgeschlossenes masterstudium|masterabschluss|master.s degree)',d):
-        return 0, []  # Luisa hat keinen nachgewiesenen Master; nicht als passend ausgeben.
-    if not alternative and re.search(r'(abgeschlossenes studium|hochschulabschluss|university degree|bachelorabschluss)',d):
-        score -= 18
-        reasons.append('Studienanforderung im Original prüfen')
-    # A title match alone is not a guarantee of fit: eliminate dedicated CNC coding roles
-    # which require controls/programming Luisa has not demonstrated.
-    cnc_specialist = bool(re.search(r'cnc|zerspanungs|dreh.fraes|mazatrol|heidenhain', title_n))
-    if cnc_specialist and re.search(r'cnc.programm|mazatrol|fanuc|heidenhain|siemens 840d|zerspanung',d):
-        score -= 34
-        reasons.append('Spezielle CNC-Programmierkenntnisse notwendig – eher ungeeignet')
-    # Do not give a high score to specialist chemistry or pure software roles.
-    if re.search(r'(chemie|lacklabor|werkstoffpruef|softwareentwickl|embedded software)',title_n):
-        score -= 28
-    if 'senior' in title_n or 'lead ' in title_n or 'leiter' in title_n: score -= 7
-    return max(0, min(96,score)), reasons
+    domain = ('fertigung', 'produktion', 'manufactur', 'assembly', 'montage',
+              'arbeitsvorbereitung', 'industrial engineering', 'produktionsplanung',
+              'fertigungsplanung', 'materialfluss', 'werksplanung', 'fabrikplanung',
+              'kapazitaet', 'line balancing', 'taktzeit', 'betriebsmittel')
+    relevant = sorted(x for x in SKILLS if x in d)
+    core_hits = sum(1 for x in domain if x in d)
+    if not tp:
+        wide_title = re.search(r'(projektkoordinator|project coordinator|project planner|'
+             r'projektmanager|projektleitung|project manager|technical project|'
+             r'supply chain|disponent|operations coordinator|operations manager|'
+             r'prozessmanager|production control)', title_n)
+        if not wide_title or core_hits < 3 or len(relevant) < 3:
+            return 0, []
+        tp = 20
+    score = 36 + tp + min(18, len(relevant)*3)
+    reasons = ['Tätigkeitsbereich passt zum Suchprofil']
+    if relevant:
+        reasons.append('Passende Erfahrung: '+', '.join(relevant[:3]))
+    if not d:
+        score -= 13
+        reasons.append('Anforderungen nicht verfügbar – Originalanzeige prüfen')
+
+    alternative = bool(re.search(r'(oder vergleichbare|vergleichbare qualifikation|'
+        r'gleichwertige qualifikation|alternativ|equivalent (experience|qualification)|'
+        r'berufserfahrung anstelle|techniker.{0,50}oder|fachwirt.{0,50}oder)', d))
+    master = bool(re.search(r'(abgeschlossenes masterstudium|masterabschluss|master.s degree)',d))
+    if master and not alternative:
+        score -= 35
+        reasons.append('Masterabschluss erwähnt – Zugangsbedingung prüfen')
+    elif not alternative and re.search(r'(abgeschlossenes studium|hochschulabschluss|'
+            r'university degree|bachelorabschluss|bachelor.s degree)',d):
+        score -= 15
+        reasons.append('Studienabschluss gefordert – gleichwertige Erfahrung prüfen')
+
+    # Strict specialized qualification is a meaningful gap, not just a smaller bonus.
+    cnc_title = bool(re.search(r'(cnc|cam.{0,12}programm|zerspan|dreh.{0,4}fraes|'
+        r'fraesprogramm|mazatrol|heidenhain)',title_n))
+    cnc_mandatory = bool(re.search(r'(cnc.{0,30}programm|mazatrol|fanuc|heidenhain|'
+         r'siemens 840d|zerspanungsmechanik|cam.{0,15}programm)',d))
+    if cnc_title and cnc_mandatory:
+        score -= 47
+        reasons.append('CNC-/CAM-Programmierung als Kernanforderung – derzeit keine belegte Erfahrung')
+    elif cnc_mandatory and re.search(r'(erfahrung|kenntnisse|fundiert|sicher)',d):
+        score -= 24
+        reasons.append('Spezialkenntnisse CNC/CAM erforderlich – vor Bewerbung prüfen')
+
+    other_specialist_title = re.search(r'(labor|chemie|biolog|medizinprodukt|'
+         r'softwareentwick|embedded|steuerfach|elektrokonstrukt|hydraulik)',title_n)
+    if other_specialist_title:
+        score -= 30
+        reasons.append('Fachspezialisierung möglicherweise nicht abgedeckt')
+    if re.search(r'(senior|principal|director|head of|abteilungsleit|bereichsleit)',title_n):
+        score -= 13
+        reasons.append('Erhöhtes Erfahrungs-/Führungsniveau prüfen')
+    return max(0, min(95,score)), reasons
 
 
 def stamp(value: Any) -> int:
@@ -151,7 +195,7 @@ def get_text(url: str, *, tries: int=2) -> str:
     for attempt in range(tries):
         try:
             req = urllib.request.Request(url, headers={
-                'User-Agent': 'LuisaJobFinder/7.0 (public employer job feed reader)',
+                'User-Agent': 'LuisaJobFinder/8.0 (public employer job feed reader)',
                 'Accept': 'application/xml, application/rss+xml, application/json, text/xml, */*'})
             with urllib.request.urlopen(req, timeout=20) as response:
                 return response.read(10_000_000).decode('utf-8-sig', errors='replace')
@@ -184,12 +228,13 @@ def personio_feed(slug: str, company: str) -> tuple[list[dict], int]:
         if not posting_id: continue
         desc = ' '.join(xml_child_text(d, 'value') for d in item.findall('./jobDescriptions/jobDescription'))
         schedule = xml_child_text(item, 'schedule')
-        # Only unambiguously full-time Personio job ads are eligible.
-        if norm(schedule) not in ('full-time','full time','vollzeit'): continue
+        # Exclude explicitly part-time-only positions. Unknown hours are visible
+        # with a warning rather than silently lost on an unfamiliar XML value.
+        if not fulltime_ok(title, desc, schedule): continue
         url = f'https://{slug}.jobs.personio.de/job/{urllib.parse.quote(posting_id, safe="")}?' + 'language=de'
         job = job_obj(f'{company} / Personio', title, company, office, url, desc,
                       xml_child_text(item, 'createdAt'), posting_id,
-                      'full-time')
+                      schedule)
         if job: results.append(job)
     return results, 1
 
@@ -225,7 +270,7 @@ def get_json(url: str, *, tries: int=2) -> dict:
     last = None
     for attempt in range(tries):
         try:
-            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/7.0 (public job feed reader)', 'Accept':'application/json'})
+            req = urllib.request.Request(url, headers={'User-Agent':'LuisaJobFinder/8.0 (public job feed reader)', 'Accept':'application/json'})
             with urllib.request.urlopen(req,timeout=20) as response:
                 raw=response.read(10_000_000)
             return json.loads(raw)
@@ -322,6 +367,9 @@ JOOBLE_TERMS = (
     'Produktionslogistik', 'Fertigungsdisponent', 'Continuous Improvement',
     'Manufacturing Planner', 'Production Planner', 'Industrialization Engineer',
     'Kapazitätsplanung', 'REFA', 'KVP Manager',
+    'Fertigungsorganisation', 'Projektkoordinator Produktion', 'Produktionsdisponent',
+    'Logistikplanung', 'Technical Project Manager', 'Supply Chain Planner',
+    'Operational Excellence', 'Prozesskoordinator', 'Planungsingenieur Produktion',
 )
 
 
@@ -331,7 +379,7 @@ def jooble_feed() -> tuple[list[dict],int]:
     if not key:
         raise RuntimeError('Noch nicht aktiviert: kostenloser API-Schlüssel fehlt (GitHub Secret JOOBLE_API_KEY)')
     # 3 calls per run * 24 runs/day = 72 requests/day, under the documented 100/day free limit.
-    # The 27 job families are covered over nine scheduled hours; prior matches are retained.
+    # The 36 job families are covered over twelve scheduled hours; prior matches are retained.
     hour=int(dt.datetime.now(dt.timezone.utc).timestamp()//3600)
     start=(hour % (len(JOOBLE_TERMS)//3))*3
     terms=JOOBLE_TERMS[start:start+3]
@@ -343,7 +391,7 @@ def jooble_feed() -> tuple[list[dict],int]:
                          'companysearch':False}).encode('utf-8')
         req=urllib.request.Request(endpoint,data=body,headers={
             'Accept':'application/json','Content-Type':'application/json',
-            'User-Agent':'LuisaJobFinder/7.0 (private job finder)'},method='POST')
+            'User-Agent':'LuisaJobFinder/8.0 (private job finder)'},method='POST')
         try:
             with urllib.request.urlopen(req,timeout=25) as response:
                 payload=json.load(response)
@@ -423,7 +471,7 @@ def main() -> int:
     if not any(s['ok'] for s in sources):
         print('Kein Feed erreichbar. Vorhandene jobs.json bleibt unverändert.',file=sys.stderr)
         return 1
-    # Keep rotating Jooble searches visible between runs (up to 12 hours),
+    # Keep rotating Jooble searches visible between runs (up to 30 hours),
     # and retain jobs of a temporarily failed provider for up to 2 days.
     good_sources={s['name'] for s in sources if s['ok']}
     prev_first={j.get('id'):j.get('firstFound') for j in prior.get('jobs',[]) if not excluded_employer(j.get('company',''),j.get('url',''))}
@@ -437,8 +485,14 @@ def main() -> int:
         # Never carry results from a provider no longer configured (e.g. NEURA).
         if old_source not in {label for label, _ in feeds}:continue
         dt_seen=stamp(p.get('lastSeen') or p.get('firstFound'))
-        max_age_hours=12 if old_source=='Jooble' and old_source in good_sources else 48
+        max_age_hours=30 if old_source=='Jooble' and old_source in good_sources else 48
         if dt_seen and time.time()*1000-dt_seen < max_age_hours*3600*1000:
+            # Important: legacy caches may contain old inflated scores.
+            score, why = score_job(p.get('title',''),p.get('description',''))
+            if score < 55: continue
+            p['matchScore'] = score
+            p['why'] = why + ([] if p.get('workingHoursConfirmed') else
+                              ['Arbeitszeit in Originalanzeige prüfen'])
             all_jobs.append(p)
             carried_ids.add(p.get('id'))
     by_key={}
@@ -450,7 +504,7 @@ def main() -> int:
             by_key[key]=j
     result=sorted(by_key.values(),key=lambda x:(-x['matchScore'],-int(x['created'] or 0)))[:500]
     out={'schema':2,'generatedAt':TODAY,'region':'Kirchheim unter Teck, grob 20 km (Ortsliste)',
-         'profile':'V7: breite Regional- und Firmenfeeds – Industrial Engineering, Fabrik-/Produktions-/Materialflussplanung, Prozessoptimierung',
+         'profile':'V8: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination',
          'sources':sources,'jobs':result}
     OUT.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print('Jobliste aktualisiert:',len(result),'Jobs;', [(s['name'],s['matched']) for s in sources])
