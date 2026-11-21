@@ -21,14 +21,22 @@ jobs:
   update-jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Repository laden
+        uses: actions/checkout@v4
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Öffentliche Stellenquellen abfragen
+
+      - name: Stellen automatisch suchen
+        env:
+          JOOBLE_API_KEY: ${{ secrets.JOOBLE_API_KEY }}
         run: python update_jobs.py
-      - name: Neue Liste veröffentlichen
+
+      - name: Stellenangebote aktualisieren
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
