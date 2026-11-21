@@ -1,8 +1,8 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-21T12:42:50+00:00",
+  "generatedAt": "2026-11-21T12:50:42+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
-  "profile": "V7: breite Regional- und Firmenfeeds – Industrial Engineering, Fabrik-/Produktions-/Materialflussplanung, Prozessoptimierung",
+  "profile": "V8: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination",
   "sources": [
     {
       "name": "Arbeitnow",
@@ -68,41 +68,23 @@
   ],
   "jobs": [
     {
-      "id": "ibo-gmbh-/-personio:2885916",
-      "source": "IBO GmbH / Personio",
-      "title": "Arbeitsvorbereitung CNC (m/w/d) - Schwerpunkt Prozessoptimierung",
-      "company": "IBO GmbH",
-      "location": "Kirchheim unter Teck",
-      "url": "https://ibo-tec.jobs.personio.de/job/2885916?language=de",
-      "description": "Eigenständige Erstellung, Optimierung und Pflege von CNC-Programmen mit Mazatrol (Schwerpunkt Dreh-/Fräszentren), inkl. Einstellblätter Programmierung und Simulation in PC-Umgebung und direkt an der Maschine Analyse und Optimierung bestehender Programme hinsichtlich Qualität, Laufzeit und Wirtschaftlichkeit Unterstützung bei der Einführung neuer Werkzeuge, Spannmittel und Bearbeitungsstrategien Enge Zusammenarbeit mit Fertigung, Qualitätssicherung und Arbeitsvorbereitung Technische Dokumentation von Programmen und Prozessen Perspektivisch: Mitwirkung in der Fertigungsplanung Unterstützung bei Kapazitäts- und Ablaufplanung Prozessanalyse und kontinuierliche Verbesserung der Produktionsabläufe Abgeschlossene Ausbildung im Bereich Zerspanungstechnik, Industriemechanik oder vergleichbar Fundiertes Verständnis der CNC-Programmierung Fähigkeit, CNC-Programme sicher zu erstellen und zu optimieren SolidWorks-Kenntnisse von Vorstel Bereitschaft und Fähigkeit, sich innerhalb kurzer Zeit – unterstützt durch externe Schulungen – gezielt in Mazatrol einzuarbeiten Idealerweise erste Erfahrung mit Mazatrol oder Mazak-Steuerungen Selbstständige, strukturierte und lösungsorientierte Arbeitsweise Hohes Qualitätsbewusstsein und ausgeprägtes technisches Verständnis Teamfähigkeit und Verantwortungsbewusstsein Moderner, digital unterstützter Arbeitsplatz in einem innovativen Unternehmen der Präzisions- und Wälzlagertechnik Kurze Entscheidungswege und flache Hierarchien Abwechslungsreiche Aufgaben mit Eigenverantwortung Möglichkeiten zur fachlichen und persönlichen Weiterentwicklung Ein engagiert",
-      "created": 1794476987000,
-      "matchScore": 87,
-      "why": [
-        "Passender Tätigkeitsbereich",
-        "Erfahrung passt: arbeitsvorbereitung, fertigung, kapazitaet"
-      ],
-      "workingHoursConfirmed": true,
-      "firstFound": "2026-11-21T11:57:53+00:00",
-      "lastSeen": "2026-11-21T12:15:30+00:00"
-    },
-    {
       "id": "jooble:-6560564111239911362",
       "source": "Jooble",
       "title": "Fertigungsplaner/-in Montage (m/w/d)",
       "company": "Da Vinci Engineering GmbH",
       "location": "Plochingen",
-      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Montageplanung&rgn=681&pos=9&groupId=0&elckey=234760975038250212&p=1&aq=-2535481721840067468&cid=734&jobAge=637&brelb=100&bscr=15.227829&scr=15.227829",
-      "description": "...Fertigungs- und Montagetechnik: praktische Planungs- und Projekterfahrung im Fertigungsumfeld, Erfahrung in der Fertigungs- oder Montageplanung, BPS-Kenntnisse bzgl. Wertstrom- und Linienplanung; Erfahrung bei der Anwendung der Zeitwirtschaftsmethodik MTM...",
+      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Fertigungsplaner&rgn=681&pos=2&groupId=20182&elckey=-5234213879115442053&p=1&aq=2736234501944742914&cid=734&jobAge=637&brelb=100&bscr=35.3208&scr=35.3208",
+      "description": "...wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/ -in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative Mitarbeiter:innen, die etwas...",
       "created": 1792978414643,
-      "matchScore": 84,
+      "matchScore": 76,
       "why": [
-        "Passender Tätigkeitsbereich",
-        "Erfahrung passt: fertigung, montage, projekt",
+        "Tätigkeitsbereich passt zum Suchprofil",
+        "Passende Erfahrung: fertigung, montage",
         "Arbeitszeit in Originalanzeige prüfen"
       ],
       "workingHoursConfirmed": false,
       "firstFound": "2026-11-21T12:15:30+00:00",
-      "lastSeen": "2026-11-21T12:42:50+00:00"
+      "lastSeen": "2026-11-21T12:50:42+00:00"
     }
   ]
 }
