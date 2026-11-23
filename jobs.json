@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-23T11:51:15+00:00",
+  "generatedAt": "2026-11-23T17:50:30+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
   "profile": "V9: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination",
   "sources": [
@@ -73,18 +73,18 @@
       "title": "Fertigungsplaner/-in Montage (m/w/d)",
       "company": "Da Vinci Engineering GmbH",
       "location": "Plochingen",
-      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=Montageplanung&rgn=681&pos=11&groupId=0&elckey=-3756907687916773666&p=1&aq=-9131600907995067091&cid=734&jobAge=684&brelb=100&bscr=15.09781&scr=15.09781",
-      "description": "...Fertigungs- und Montagetechnik: praktische Planungs- und Projekterfahrung im Fertigungsumfeld, Erfahrung in der Fertigungs- oder Montageplanung, BPS-Kenntnisse bzgl. Wertstrom- und Linienplanung; Erfahrung bei der Anwendung der Zeitwirtschaftsmethodik MTM...",
+      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=REFA&rgn=681&pos=4&groupId=41388&elckey=-4359200289470352124&p=1&aq=-2540417486652583371&cid=734&jobAge=690&brelb=100&bscr=10.66843&scr=10.66843",
+      "description": "Kaum etwas motiviert so sehr wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/-in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative ...",
       "created": 1792978414643,
-      "matchScore": 82,
+      "matchScore": 76,
       "why": [
         "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: fertigung, montage, projekt",
+        "Passende Erfahrung: fertigung, montage",
         "Arbeitszeit in Originalanzeige prüfen"
       ],
       "workingHoursConfirmed": false,
       "firstFound": "2026-11-21T12:15:30+00:00",
-      "lastSeen": "2026-11-23T11:51:15+00:00"
+      "lastSeen": "2026-11-23T17:50:30+00:00"
     },
     {
       "id": "jooble:1544773417490990500",
@@ -104,40 +104,22 @@
       "lastSeen": "2026-11-22T17:34:46+00:00"
     },
     {
-      "id": "jooble:-1558834326585309796",
-      "source": "Jooble",
-      "title": "Werksstudent (m/w/d) Produktionsmanagement",
-      "company": "ElringKlinger AG",
-      "location": "Neuffen",
-      "url": "https://de.jooble.org/desc/-1558834326585309796?ckey=Produktionskoordinator&rgn=681&pos=22&groupId=23107&elckey=3627928104799069932&p=1&aq=6607328693171667460&cid=734&jobAge=85&brelb=100&bscr=5.4905176&scr=5.4905176",
-      "description": "Woran Du mit uns arbeitest: Unterstützung im Aufbau einer Laseranlage und der dazugehörigen Prozesse Aktualisierung und Weiterentwicklung von abteilungsinternen Prozessen Übernahme von Kleinprojekten Durchführung von Qualitätskontrollen und Dokumentation der...",
-      "created": 1795088670323,
-      "matchScore": 67,
-      "why": [
-        "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: projekt, prozess",
-        "Arbeitszeit in Originalanzeige prüfen"
-      ],
-      "workingHoursConfirmed": false,
-      "firstFound": "2026-11-22T11:40:23+00:00",
-      "lastSeen": "2026-11-22T11:40:23+00:00"
-    },
-    {
-      "id": "jooble:5571425537223289233",
+      "id": "jooble:-6020909347160508449",
       "source": "Jooble",
       "title": "Produktionslogistiker (m/w/d)",
       "company": "Storopack Deutschland GmbH + Co. KG",
       "location": "Metzingen",
-      "url": "https://de.jooble.org/away/5571425537223289233?p=1&pos=1&rgn=681&cid=734&ckey=Logistikplaner&jobAge=421&brelb=110&scr=113.75416&bscr=113.75416&aq=-6951600082810787785&crId=DE_3045341135284176576DE_681&elckey=2686732947666646400",
-      "description": "KARRIERE IST, IN DER VIELZAHL VON MÖGLICHKEITEN, SEINEN GANZ EIGENEN WEG ZU FINDEN. Sie sind für uns wichtig. Die Kreativität und Leistungsbereitschaft unserer weltweit rund 2.500 Mitarbeiter an 69 Standorten bilden einen Grundpfeiler unseres Erfolgs. Storopack...",
+      "url": "https://de.jooble.org/away/-6020909347160508449?p=1&pos=1&rgn=681&cid=734&ckey=Produktionslogistik&jobAge=427&brelb=110&scr=835.8165&bscr=835.8165&aq=5137516777879282335&crId=DE_-2033111903142144304DE_681&elckey=-8942743265245897750",
+      "description": "...eine international führende Unternehmensgruppe, die Schutzverpackungen und technische Formteile entwickelt und produziert. Produktionslogistiker (m/w/d) Standort: Metzingen WAS SIE BEI UNS ERWARTET Versorgung der Produktion mit Mutterrollen sowie...",
       "created": 1793923200000,
-      "matchScore": 59,
+      "matchScore": 62,
       "why": [
-        "Tätigkeitsbereich passt zum Suchprofil"
+        "Tätigkeitsbereich passt zum Suchprofil",
+        "Passende Erfahrung: produktion"
       ],
       "workingHoursConfirmed": true,
-      "firstFound": "2026-11-22T17:34:46+00:00",
-      "lastSeen": "2026-11-23T11:51:15+00:00"
+      "firstFound": "2026-11-23T17:50:30+00:00",
+      "lastSeen": "2026-11-23T17:50:30+00:00"
     }
   ]
 }
