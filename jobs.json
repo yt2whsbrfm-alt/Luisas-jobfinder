@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-24T17:45:13+00:00",
+  "generatedAt": "2026-11-25T11:57:07+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
   "profile": "V9: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination",
   "sources": [
@@ -63,28 +63,28 @@
       "name": "Jooble",
       "ok": true,
       "pages": 18,
-      "matched": 3
+      "matched": 2
     }
   ],
   "jobs": [
     {
-      "id": "jooble:-6560564111239911362",
+      "id": "jooble:-9186961184893746104",
       "source": "Jooble",
       "title": "Fertigungsplaner/-in Montage (m/w/d)",
       "company": "Da Vinci Engineering GmbH",
       "location": "Plochingen",
-      "url": "https://de.jooble.org/desc/-6560564111239911362?ckey=REFA&rgn=681&pos=4&groupId=41388&elckey=-8369083637050093548&p=1&aq=-7880812290248644411&cid=734&jobAge=714&brelb=100&bscr=10.579779&scr=10.579779",
-      "description": "Kaum etwas motiviert so sehr wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/-in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative ...",
-      "created": 1792978414643,
-      "matchScore": 76,
+      "url": "https://de.jooble.org/desc/-9186961184893746104?ckey=Montageplanung&rgn=681&pos=11&elckey=5523418879855297192&p=1&aq=-3528359076171388534&cid=734&jobAge=13&brelb=100&bscr=14.996777&scr=14.996777",
+      "description": "...Fertigungs- und Montagetechnik: praktische Planungs- und Projekterfahrung im Fertigungsumfeld, Erfahrung in der Fertigungs- oder Montageplanung, BPS-Kenntnisse bzgl. Wertstrom- und Linienplanung; - Erfahrung bei der Anwendung der Zeitwirtschaftsmethodik MTM...",
+      "created": 1795566275083,
+      "matchScore": 82,
       "why": [
         "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: fertigung, montage",
+        "Passende Erfahrung: fertigung, montage, projekt",
         "Arbeitszeit in Originalanzeige prüfen"
       ],
       "workingHoursConfirmed": false,
-      "firstFound": "2026-11-21T12:15:30+00:00",
-      "lastSeen": "2026-11-24T17:45:13+00:00"
+      "firstFound": "2026-11-25T11:57:07+00:00",
+      "lastSeen": "2026-11-25T11:57:07+00:00"
     },
     {
       "id": "jooble:1544773417490990500",
@@ -109,17 +109,16 @@
       "title": "Produktionslogistiker (m/w/d)",
       "company": "Storopack Deutschland GmbH + Co. KG",
       "location": "Metzingen",
-      "url": "https://de.jooble.org/away/619518314256491008?p=1&pos=1&rgn=681&cid=734&ckey=Produktionslogistik&jobAge=451&brelb=110&scr=870.1837&bscr=870.1837&aq=9065285490414124071&crId=DE_-2033111903142144304DE_681&elckey=5494117460883912442",
-      "description": "...eine international führende Unternehmensgruppe, die Schutzverpackungen und technische Formteile entwickelt und produziert. Produktionslogistiker (m/w/d) Standort: Metzingen WAS SIE BEI UNS ERWARTET Versorgung der Produktion mit Mutterrollen sowie...",
+      "url": "https://de.jooble.org/away/619518314256491008?p=1&pos=1&rgn=681&cid=734&ckey=Logistikplaner&jobAge=469&brelb=110&scr=111.483925&bscr=111.483925&aq=7933603515777087065&crId=DE_3045341135284176576DE_681&elckey=-5503053231493705446",
+      "description": "KARRIERE IST, IN DER VIELZAHL VON MÖGLICHKEITEN, SEINEN GANZ EIGENEN WEG ZU FINDEN. Sie sind für uns wichtig. Die Kreativität und Leistungsbereitschaft unserer weltweit rund 2.500 Mitarbeiter an 69 Standorten bilden einen Grundpfeiler unseres Erfolgs. Storopack...",
       "created": 1793923200000,
-      "matchScore": 62,
+      "matchScore": 59,
       "why": [
-        "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: produktion"
+        "Tätigkeitsbereich passt zum Suchprofil"
       ],
       "workingHoursConfirmed": true,
       "firstFound": "2026-11-24T17:45:13+00:00",
-      "lastSeen": "2026-11-24T17:45:13+00:00"
+      "lastSeen": "2026-11-25T11:57:07+00:00"
     }
   ]
 }
