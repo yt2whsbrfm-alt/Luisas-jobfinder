@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "generatedAt": "2026-11-25T17:42:40+00:00",
+  "generatedAt": "2026-11-26T11:55:49+00:00",
   "region": "Kirchheim unter Teck, grob 20 km (Ortsliste)",
   "profile": "V9: breiterer Branchenabgleich – Industrial Engineering, Produktion, Prozess-/Fabrik-/Materialflussplanung, technische Koordination",
   "sources": [
@@ -73,35 +73,18 @@
       "title": "Fertigungsplaner/-in Montage (m/w/d)",
       "company": "Da Vinci Engineering GmbH",
       "location": "Plochingen",
-      "url": "https://de.jooble.org/desc/-9186961184893746104?ckey=REFA&rgn=681&pos=5&groupId=41388&elckey=5494451683690717689&p=1&aq=-1332596026669671691&cid=734&jobAge=19&brelb=100&bscr=10.522542&scr=10.522542",
-      "description": "Kaum etwas motiviert so sehr wie Erfolg. Da Vinci Engineering engagiert sich für den Erfolg der eigenen Mitarbeiter:innen. Werden Sie ein Teil von uns! Fertigungsplaner/-in Montage (m/w/d) Stellen-ID: 22338 Standort: Plochingen Wir suchen kluge und innovative ...",
+      "url": "https://de.jooble.org/desc/-9186961184893746104?ckey=Montageplanung&rgn=681&pos=11&groupId=0&elckey=940210126886556813&p=1&aq=-4084309382466660395&cid=734&jobAge=37&brelb=100&bscr=15.087816&scr=15.087816",
+      "description": "...Fertigungs- und Montagetechnik: praktische Planungs- und Projekterfahrung im Fertigungsumfeld, Erfahrung in der Fertigungs- oder Montageplanung, BPS-Kenntnisse bzgl. Wertstrom- und Linienplanung; - Erfahrung bei der Anwendung der Zeitwirtschaftsmethodik MTM...",
       "created": 1795566275083,
-      "matchScore": 76,
+      "matchScore": 82,
       "why": [
         "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: fertigung, montage",
+        "Passende Erfahrung: fertigung, montage, projekt",
         "Arbeitszeit in Originalanzeige prüfen"
       ],
       "workingHoursConfirmed": false,
       "firstFound": "2026-11-25T11:57:07+00:00",
-      "lastSeen": "2026-11-25T17:42:40+00:00"
-    },
-    {
-      "id": "jooble:1544773417490990500",
-      "source": "Jooble",
-      "title": "Arbeitsvorbereiter - Disposition / Montageplanung (m/w/d)",
-      "company": "clauss markisen Projekt GmbH",
-      "location": "Bissingen an der Teck",
-      "url": "https://de.jooble.org/desc/1544773417490990500?ckey=Production+Planner&rgn=681&pos=4&groupId=20182&elckey=-912002538913961854&p=1&aq=5652984161162740691&cid=734&jobAge=91&brelb=100&bscr=23.239487&scr=23.239487",
-      "description": "Was entsteht, wenn Leidenschaft und Präzision zusammentreffen? Wir gestalten die Zukunft textiler Systeme, die Gebäude sicherer und komfortabler machen. Als Teil unseres Teams entwickelst du maßgeschneiderte Lösungen für Rauch-, Brand-, Blend- und Sonnenschutz. Hier findest...",
-      "created": 1795219200000,
-      "matchScore": 67,
-      "why": [
-        "Tätigkeitsbereich passt zum Suchprofil"
-      ],
-      "workingHoursConfirmed": true,
-      "firstFound": "2026-11-22T11:40:23+00:00",
-      "lastSeen": "2026-11-24T17:45:13+00:00"
+      "lastSeen": "2026-11-26T11:55:49+00:00"
     },
     {
       "id": "jooble:-4778356162010287956",
@@ -109,17 +92,16 @@
       "title": "Produktionslogistiker (m/w/d)",
       "company": "Storopack Deutschland GmbH + Co. KG",
       "location": "Metzingen",
-      "url": "https://de.jooble.org/away/-4778356162010287956?p=1&pos=1&rgn=681&cid=734&ckey=Produktionslogistik&jobAge=475&brelb=110&scr=830.18933&bscr=830.18933&aq=4744837248820988907&crId=DE_-2033111903142144304DE_681&elckey=910908707915172063",
-      "description": "...eine international führende Unternehmensgruppe, die Schutzverpackungen und technische Formteile entwickelt und produziert. Produktionslogistiker (m/w/d) Standort: Metzingen WAS SIE BEI UNS ERWARTET Versorgung der Produktion mit Mutterrollen sowie...",
+      "url": "https://de.jooble.org/away/-4778356162010287956?p=1&pos=1&rgn=681&cid=734&ckey=Logistikplaner&jobAge=493&brelb=110&scr=114.07663&bscr=114.07663&aq=-7208090323542367831&crId=DE_3045341135284176576DE_681&elckey=-374574284219105561",
+      "description": "KARRIERE IST, IN DER VIELZAHL VON MÖGLICHKEITEN, SEINEN GANZ EIGENEN WEG ZU FINDEN. Sie sind für uns wichtig. Die Kreativität und Leistungsbereitschaft unserer weltweit rund 2.500 Mitarbeiter an 69 Standorten bilden einen Grundpfeiler unseres Erfolgs. Storopack...",
       "created": 1793923200000,
-      "matchScore": 62,
+      "matchScore": 59,
       "why": [
-        "Tätigkeitsbereich passt zum Suchprofil",
-        "Passende Erfahrung: produktion"
+        "Tätigkeitsbereich passt zum Suchprofil"
       ],
       "workingHoursConfirmed": true,
       "firstFound": "2026-11-25T17:42:40+00:00",
-      "lastSeen": "2026-11-25T17:42:40+00:00"
+      "lastSeen": "2026-11-26T11:55:49+00:00"
     }
   ]
 }
